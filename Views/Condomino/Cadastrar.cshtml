@@ -1,45 +1,72 @@
 @model TrabalhoElvis2.Models.Condomino
-<link rel="stylesheet" href="~/css/usuario.css" />
-<h2>Novo Condômino</h2>
-<form asp-action="Cadastrar" method="post">
-    <div class="form-group">
+
+<h2 class="text-primary">Cadastrar Condômino</h2>
+<hr />
+
+<form asp-action="Cadastrar" method="post" style="max-width:700px;">
+    <div class="form-group mb-3">
         <label asp-for="NomeCompleto"></label>
         <input asp-for="NomeCompleto" class="form-control" />
-        <span class="text-danger" asp-validation-for="NomeCompleto"></span>
+        <span asp-validation-for="NomeCompleto" class="text-danger"></span>
     </div>
-    <div class="form-group">
+
+    <div class="form-group mb-3">
         <label asp-for="Cpf"></label>
         <input asp-for="Cpf" class="form-control" />
-        <span class="text-danger" asp-validation-for="Cpf"></span>
+        <span asp-validation-for="Cpf" class="text-danger"></span>
     </div>
-    <div class="form-group">
+
+    <div class="form-group mb-3">
         <label asp-for="Email"></label>
         <input asp-for="Email" class="form-control" />
-        <span class="text-danger" asp-validation-for="Email"></span>
     </div>
-    <div class="form-group">
+
+    <div class="form-group mb-3">
         <label asp-for="Telefone"></label>
         <input asp-for="Telefone" class="form-control" />
     </div>
-    <div class="form-group">
+
+    <div class="form-group mb-3">
         <label asp-for="Tipo"></label>
-        <select asp-for="Tipo" class="form-control">
+        <select asp-for="Tipo" class="form-control" id="tipoSelect">
             <option>Proprietário</option>
             <option>Locatário</option>
         </select>
-        <span class="text-danger" asp-validation-for="Tipo"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="DataContrato"></label>
-        <input asp-for="DataContrato" type="date" class="form-control" />
+
+    <!-- Campos Locatário -->
+    <div id="camposLocatario" style="display:none;">
+        <h5 class="text-secondary mt-3">Dados de Locação</h5>
+        <div class="form-group mb-3">
+            <label asp-for="InicioLocacao">Início da Locação</label>
+            <input asp-for="InicioLocacao" type="date" class="form-control" />
+        </div>
+        <div class="form-group mb-3">
+            <label asp-for="FimLocacao">Fim da Locação</label>
+            <input asp-for="FimLocacao" type="date" class="form-control" />
+        </div>
+        <div class="form-group mb-3">
+            <label asp-for="ValorAluguel">Valor do Aluguel</label>
+            <input asp-for="ValorAluguel" class="form-control" type="number" step="0.01" />
+        </div>
     </div>
-    <div class="form-group">
+
+    <div class="form-group mb-3">
         <label asp-for="Observacoes"></label>
-        <input asp-for="Observacoes" class="form-control" />
+        <textarea asp-for="Observacoes" class="form-control"></textarea>
     </div>
-    <div class="text-center mt-3">
-        <button class="btn btn-primary">Salvar</button>
-        <a class="btn btn-secondary" href="/Condomino">Voltar</a>
-    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a href="/Condomino" class="btn btn-secondary">Voltar</a>
 </form>
-@section Scripts { <partial name="_ValidationScriptsPartial" /> }
+
+@section Scripts {
+    <script>
+        const tipoSelect = document.getElementById("tipoSelect");
+        const camposLocatario = document.getElementById("camposLocatario");
+
+        tipoSelect.addEventListener("change", () => {
+            camposLocatario.style.display = tipoSelect.value === "Locatário" ? "block" : "none";
+        });
+    </script>
+}

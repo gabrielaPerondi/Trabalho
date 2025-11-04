@@ -10,52 +10,26 @@ namespace TrabalhoElvis2.Controllers
         private readonly LoginContext _ctx;
         public CondominoController(LoginContext ctx) => _ctx = ctx;
 
+        // === LISTAR ===
         public async Task<IActionResult> Index()
         {
             var lista = await _ctx.Condominos
                 .Include(c => c.Imoveis)
+                .OrderBy(c => c.NomeCompleto)
                 .ToListAsync();
             return View(lista);
         }
 
-        [HttpGet]
-        public IActionResult Cadastrar() => View();
-
+        // === CADASTRAR ===
         [HttpPost]
         public async Task<IActionResult> Cadastrar(Condomino model)
         {
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+                return View("Index", await _ctx.Condominos.ToListAsync());
+
             _ctx.Condominos.Add(model);
             await _ctx.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
 
-        [HttpGet]
-        public async Task<IActionResult> Editar(int id)
-        {
-            var c = await _ctx.Condominos.FindAsync(id);
-            if (c == null) return NotFound();
-            return View(c);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Editar(Condomino model)
-        {
-            if (!ModelState.IsValid) return View(model);
-            _ctx.Update(model);
-            await _ctx.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Excluir(int id)
-        {
-            var c = await _ctx.Condominos.FindAsync(id);
-            if (c != null)
-            {
-                _ctx.Condominos.Remove(c);
-                await _ctx.SaveChangesAsync();
-            }
             return RedirectToAction(nameof(Index));
         }
     }

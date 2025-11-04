@@ -1,31 +1,80 @@
 @model IEnumerable<TrabalhoElvis2.Models.Condomino>
-<link rel="stylesheet" href="~/css/usuario.css" />
-<h2>Condôminos</h2>
-<div style="margin-bottom:12px;">
-    <a class="btn btn-primary" href="/Condomino/Cadastrar">+ Novo Condômino</a>
+
+@{
+    Layout = "_LayoutDashboard";
+    ViewData["Title"] = "Pessoas";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold">Pessoas</h3>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalPessoa">
+        <i class="fa-solid fa-plus"></i> Nova Pessoa
+    </button>
 </div>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Nome</th><th>CPF</th><th>Email</th><th>Tipo</th><th>Contrato</th><th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
+
+<div class="input-group mb-3">
+    <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+    <input type="text" class="form-control" placeholder="Buscar por nome, CPF ou e-mail..." />
+</div>
+
+<div class="row">
     @foreach (var c in Model)
     {
-        <tr>
-            <td>@c.NomeCompleto</td>
-            <td>@c.Cpf</td>
-            <td>@c.Email</td>
-            <td>@c.Tipo</td>
-            <td>@c.DataContrato.ToString("dd/MM/yyyy")</td>
-            <td>
-                <a class="btn btn-primary" href="/Condomino/Editar/@c.Id">Editar</a>
-                <form method="post" action="/Condomino/Excluir/@c.Id" style="display:inline;">
-                    <button class="btn btn-secondary" type="submit">Excluir</button>
-                </form>
-            </td>
-        </tr>
+        <div class="col-md-6 mb-3">
+            <div class="card p-3 shadow-sm">
+                <h5><i class="fa-regular fa-user"></i> @c.NomeCompleto</h5>
+                <p class="mb-1 text-muted">CPF: @c.Cpf</p>
+                <p class="mb-1"><i class="fa-solid fa-envelope"></i> @c.Email</p>
+                <p class="mb-1"><i class="fa-solid fa-phone"></i> @c.Telefone</p>
+                <span class="badge bg-success mt-2">Ativo</span>
+            </div>
+        </div>
     }
-    </tbody>
-</table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalPessoa" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content p-3">
+            <div class="modal-header">
+                <h5 class="modal-title">Cadastrar Nova Pessoa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Cadastrar" method="post">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Nome Completo</label>
+                            <input name="NomeCompleto" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">CPF</label>
+                            <input name="Cpf" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">E-mail</label>
+                            <input name="Email" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Telefone</label>
+                            <input name="Telefone" class="form-control" />
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Tipo</label>
+                            <select name="Tipo" class="form-select">
+                                <option value="Proprietário">Proprietário</option>
+                                <option value="Locatário">Locatário</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="text-end mt-3">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

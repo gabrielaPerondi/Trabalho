@@ -9,67 +9,100 @@ namespace TrabalhoElvis2.Controllers
     public class ImovelController : Controller
     {
         private readonly LoginContext _ctx;
-        public ImovelController(LoginContext ctx) => _ctx = ctx;
+        public ImovelController(LoginContext ctx)
+        {
+            _ctx = ctx;
+        }
 
+        // ==== LISTAR ====
         public async Task<IActionResult> Index()
         {
+            // Verifica se o usuário é Administrador
+            if (TempData["TipoUsuario"]?.ToString() != "Administrador")
+                return RedirectToAction("Login", "Usuario");
+
             var lista = await _ctx.Imoveis
                 .Include(i => i.Condomino)
+                .OrderBy(i => i.Codigo)
                 .ToListAsync();
+
+            // ViewBag para o modal de cadastro
+            ViewBag.Condominos = new SelectList(
+                _ctx.Condominos.OrderBy(c => c.NomeCompleto).ToList(),
+                "Id",
+                "NomeCompleto"
+            );
+
             return View(lista);
         }
 
-        [HttpGet]
-        public IActionResult Cadastrar()
-        {
-            ViewBag.Condominos = new SelectList(_ctx.Condominos.OrderBy(c => c.NomeCompleto).ToList(), "Id", "NomeCompleto");
-            return View();
-        }
-
+        // ==== CADASTRAR ====
         [HttpPost]
-        public async Task<IActionResult> Cadastrar(Imovel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Cadastrar(Imovel imovel)
         {
             if (!ModelState.IsValid)
             {
                 ViewBag.Condominos = new SelectList(_ctx.Condominos.OrderBy(c => c.NomeCompleto).ToList(), "Id", "NomeCompleto");
-                return View(model);
+                var lista = await _ctx.Imoveis.Include(i => i.Condomino).ToListAsync();
+                return View("Index", lista);
             }
-            _ctx.Imoveis.Add(model);
+
+            _ctx.Imoveis.Add(imovel);
             await _ctx.SaveChangesAsync();
+
+            TempData["MensagemSucesso"] = "Imóvel cadastrado com sucesso!";
             return RedirectToAction(nameof(Index));
         }
 
+        // ==== EDITAR ====
         [HttpGet]
         public async Task<IActionResult> Editar(int id)
         {
-            var i = await _ctx.Imoveis.FindAsync(id);
-            if (i == null) return NotFound();
-            ViewBag.Condominos = new SelectList(_ctx.Condominos.OrderBy(c => c.NomeCompleto).ToList(), "Id", "NomeCompleto", i.CondominoId);
-            return View(i);
+            var imovel = await _ctx.Imoveis.FindAsync(id);
+            if (imovel == null)
+                return NotFound();
+
+            ViewBag.Condominos = new SelectList(
+                _ctx.Condominos.OrderBy(c => c.NomeCompleto).ToList(),
+                "Id",
+                "NomeCompleto",
+                imovel.CondominoId
+            );
+
+            return View(imovel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Editar(Imovel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Editar(Imovel imovel)
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Condominos = new SelectList(_ctx.Condominos.OrderBy(c => c.NomeCompleto).ToList(), "Id", "NomeCompleto", model.CondominoId);
-                return View(model);
+                ViewBag.Condominos = new SelectList(_ctx.Condominos.OrderBy(c => c.NomeCompleto).ToList(), "Id", "NomeCompleto", imovel.CondominoId);
+                return View(imovel);
             }
-            _ctx.Update(model);
+
+            _ctx.Imoveis.Update(imovel);
             await _ctx.SaveChangesAsync();
+
+            TempData["MensagemSucesso"] = "Imóvel atualizado com sucesso!";
             return RedirectToAction(nameof(Index));
         }
 
+        // ==== EXCLUIR ====
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Excluir(int id)
         {
-            var i = await _ctx.Imoveis.FindAsync(id);
-            if (i != null)
-            {
-                _ctx.Imoveis.Remove(i);
-                await _ctx.SaveChangesAsync();
-            }
+            var imovel = await _ctx.Imoveis.FindAsync(id);
+            if (imovel == null)
+                return NotFound();
+
+            _ctx.Imoveis.Remove(imovel);
+            await _ctx.SaveChangesAsync();
+
+            TempData["MensagemSucesso"] = "Imóvel excluído com sucesso!";
             return RedirectToAction(nameof(Index));
         }
     }

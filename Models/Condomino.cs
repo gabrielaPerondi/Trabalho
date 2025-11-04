@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TrabalhoElvis2.Models
 {
@@ -19,15 +20,21 @@ namespace TrabalhoElvis2.Models
         [Phone(ErrorMessage = "Telefone inválido.")]
         public string? Telefone { get; set; }
 
-        [Required(ErrorMessage = "O tipo é obrigatório.")]
-        public string Tipo { get; set; } = "Proprietário"; // Proprietário | Locatário
+        [Required(ErrorMessage = "Selecione o tipo do condômino.")]
+        public string Tipo { get; set; } = "Proprietário"; // Proprietário ou Locatário
 
         [DataType(DataType.Date)]
-        public DateTime DataContrato { get; set; } = DateTime.Today;
+        public DateTime? InicioLocacao { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime? FimLocacao { get; set; }
+
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal? ValorAluguel { get; set; }
 
         public string? Observacoes { get; set; }
 
-        // Navegação: 1 condômino -> N imóveis
+        // 🔗 Relação 1:N (um condômino -> vários imóveis)
         public ICollection<Imovel>? Imoveis { get; set; }
     }
 }

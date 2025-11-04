@@ -12,8 +12,8 @@ using TrabalhoElvis2.Context;
 namespace TrabalhoElvis2.Migrations
 {
     [DbContext(typeof(LoginContext))]
-    [Migration("20251103194749_CriarBa")]
-    partial class CriarBa
+    [Migration("20251104190155_CriacaoTabel")]
+    partial class CriacaoTabel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,12 +76,15 @@ namespace TrabalhoElvis2.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DataContrato")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("FimLocacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("InicioLocacao")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("NomeCompleto")
                         .IsRequired()
@@ -96,6 +99,9 @@ namespace TrabalhoElvis2.Migrations
                     b.Property<string>("Tipo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("ValorAluguel")
+                        .HasColumnType("decimal(10,2)");
 
                     b.HasKey("Id");
 
@@ -140,9 +146,13 @@ namespace TrabalhoElvis2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Bloco")
+                    b.Property<int>("Banheiros")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Codigo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<int?>("CondominoId")
                         .HasColumnType("int");
@@ -150,12 +160,24 @@ namespace TrabalhoElvis2.Migrations
                     b.Property<double>("Metragem")
                         .HasColumnType("float");
 
-                    b.Property<string>("Numero")
-                        .IsRequired()
+                    b.Property<string>("Observacoes")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Observacao")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Quartos")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal>("ValorAluguel")
+                        .HasColumnType("decimal(10,2)");
 
                     b.HasKey("Id");
 

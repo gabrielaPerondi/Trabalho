@@ -15,13 +15,11 @@ namespace TrabalhoElvis2.Controllers
             _context = context;
         }
 
-        // --- GET: CADASTRAR ---
         public IActionResult Cadastrar()
         {
             return View();
         }
 
-        // --- POST: CADASTRAR ---
         [HttpPost]
         public IActionResult Cadastrar(Usuario usuario)
         {
@@ -30,12 +28,28 @@ namespace TrabalhoElvis2.Controllers
                 try
                 {
                     _context.Usuarios.Add(usuario);
-                    int registros = _context.SaveChanges();
+                    _context.SaveChanges();
 
-                    Console.WriteLine($"✅ Usuário cadastrado com sucesso! Registros: {registros}");
-                    TempData["MensagemSucesso"] = "Cadastro realizado com sucesso! Faça login para continuar.";
+                    // Guarda o tipo de usuário e ID pra redirecionar
+                    TempData["TipoUsuario"] = usuario.TipoUsuario;
+                    TempData["Nome"] = usuario.NomeAdministrador ?? usuario.NomeCompleto;
+                    TempData["IdUsuario"] = usuario.Id;
 
-                    return RedirectToAction("Login", "Usuario");
+                    // Redireciona direto pra interface correspondente
+                    switch (usuario.TipoUsuario)
+                    {
+                        case "Administrador":
+                            return RedirectToAction("Index", "Dashboard");
+
+                        case "Síndico":
+                            return RedirectToAction("InterfaceSindico", "Usuario");
+
+                        case "Morador":
+                            return RedirectToAction("InterfaceMorador", "Usuario");
+
+                        default:
+                            return RedirectToAction("Login", "Usuario");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -54,7 +68,6 @@ namespace TrabalhoElvis2.Controllers
             return View(usuario);
         }
 
-        // --- GET: LOGIN ---
         [HttpGet]
         public IActionResult Login()
         {
@@ -71,11 +84,12 @@ namespace TrabalhoElvis2.Controllers
                 return View();
             }
 
+            // Normaliza texto (remove acentos e deixa minúsculo)
             string Normalizar(string texto)
             {
                 return new string(texto
-                    .Normalize(NormalizationForm.FormD)
-                    .Where(ch => CharUnicodeInfo.GetUnicodeCategory(ch) != UnicodeCategory.NonSpacingMark)
+                    .Normalize(System.Text.NormalizationForm.FormD)
+                    .Where(ch => System.Globalization.CharUnicodeInfo.GetUnicodeCategory(ch) != System.Globalization.UnicodeCategory.NonSpacingMark)
                     .ToArray())
                     .ToLower();
             }
@@ -95,12 +109,25 @@ namespace TrabalhoElvis2.Controllers
                 return View();
             }
 
+            // Guarda informações para uso posterior
             TempData["TipoUsuario"] = usuario.TipoUsuario;
             TempData["Nome"] = usuario.NomeAdministrador ?? usuario.NomeCompleto;
             TempData["IdUsuario"] = usuario.Id;
 
-            return RedirectToAction("Interface");
+            // === Redirecionamento por tipo de usuário ===
+            switch (usuario.TipoUsuario)
+            {
+                case "Administrador":
+                    return RedirectToAction("Index", "Dashboard");
+                case "Síndico":
+                    return RedirectToAction("InterfaceSindico");
+                case "Morador":
+                    return RedirectToAction("InterfaceMorador");
+                default:
+                    return RedirectToAction("Login");
+            }
         }
+
 
         // --- INTERFACE ---
         public IActionResult Interface()
