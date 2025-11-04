@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "kQWOGHJWMmG5QOUolCJOncMkL8CH+vMn7dJ/7/Mx5gs=",
+  "Hash": "WsBFvEf+iNBex/6aORAFIdAyzCVDu7ZNARVgVljjYAI=",
   "Source": "TrabalhoElvis2",
   "BasePath": "_content/TrabalhoElvis2",
   "Mode": "Default",
@@ -53,6 +53,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\429438624\\Documents\\Projeto\\TrabalhoElviss2\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\TrabalhoElvis2.bundle.scp.css"
+    },
+    {
+      "Identity": "C:\\Users\\429438624\\Documents\\Projeto\\TrabalhoElviss2\\wwwroot\\css\\imoveis.css",
+      "SourceId": "TrabalhoElvis2",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\429438624\\Documents\\Projeto\\TrabalhoElviss2\\wwwroot\\",
+      "BasePath": "_content/TrabalhoElvis2",
+      "RelativePath": "css/imoveis.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\imoveis.css"
     },
     {
       "Identity": "C:\\Users\\429438624\\Documents\\Projeto\\TrabalhoElviss2\\wwwroot\\css\\site.css",

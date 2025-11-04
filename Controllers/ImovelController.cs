@@ -18,7 +18,8 @@ namespace TrabalhoElvis2.Controllers
         public async Task<IActionResult> Index()
         {
             // Verifica se o usuário é Administrador
-            if (TempData["TipoUsuario"]?.ToString() != "Administrador")
+            var tipoUsuario = HttpContext.Session.GetString("TipoUsuario");
+            if (tipoUsuario != "Administrador")
                 return RedirectToAction("Login", "Usuario");
 
             var lista = await _ctx.Imoveis

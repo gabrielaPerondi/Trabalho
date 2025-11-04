@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,24 +15,20 @@
             overflow-x: hidden;
         }
 
-        /* === SIDEBAR === */
+        /* ===== SIDEBAR ===== */
         .sidebar {
             width: 240px;
             height: 100vh;
             position: fixed;
             top: 0;
             left: 0;
-            background: #fff;
+            background: #ffffff;
             border-right: 1px solid #dee2e6;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             transition: all 0.3s ease;
             z-index: 2000;
-        }
-
-        .sidebar.collapsed {
-            width: 70px;
         }
 
         .sidebar .logo {
@@ -43,12 +38,12 @@
             padding: 20px;
             border-bottom: 1px solid #e9ecef;
             text-align: center;
-            transition: all 0.3s ease;
         }
 
-        .sidebar.collapsed .logo small,
-        .sidebar.collapsed .logo span {
-            display: none;
+        .sidebar .logo small {
+            display: block;
+            font-size: 0.75rem;
+            color: #6c757d;
         }
 
         .nav-link {
@@ -58,7 +53,6 @@
             border-radius: 8px;
             margin: 3px 10px;
             transition: 0.2s;
-            white-space: nowrap;
         }
 
         .nav-link:hover,
@@ -72,19 +66,9 @@
             margin-right: 10px;
         }
 
-        .sidebar.collapsed .nav-link span {
-            display: none;
-        }
-
         .sidebar .bottom {
             border-top: 1px solid #e9ecef;
             padding: 15px 20px;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar.collapsed .bottom .user-info small,
-        .sidebar.collapsed .bottom .user-info span {
-            display: none;
         }
 
         .user-info {
@@ -113,77 +97,121 @@
             transition: all 0.3s ease;
         }
 
-        .sidebar.collapsed + .content {
-            margin-left: 70px;
-        }
-
-        /* === TOGGLE BUTTON (3 barrinhas) === */
+        /* ===== TOGGLE BUTTON ===== */
         .toggle-btn {
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            z-index: 2100;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 8px 10px;
-            cursor: pointer;
             display: none;
+            background: none;
+            border: none;
+            color: #007bff;
+            font-size: 1.6rem;
+            margin-right: 15px;
+            cursor: pointer;
         }
 
-        @media (max-width: 992px) {
+        .topbar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 25px;
+            background: #fff;
+            border-bottom: 1px solid #dee2e6;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .topbar h5 {
+            margin: 0;
+            font-weight: 600;
+            color: #007bff;
+        }
+
+        /* ===== BACKDROP ===== */
+        .backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1500;
+        }
+
+        .backdrop.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ===== ANIMAÇÃO SIDEBAR ===== */
+        .sidebar {
+            transform: translateX(0);
+        }
+
+        .sidebar.hidden {
+            transform: translateX(-250px);
+        }
+
+        .sidebar.active {
+            transform: translateX(0);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ===== RESPONSIVO ===== */
+        @@media (max-width: 992px) {
             .sidebar {
-                left: -240px;
-            }
-
-            .sidebar.active {
-                left: 0;
-            }
-
-            .toggle-btn {
-                display: block;
+                transform: translateX(-250px);
+                position: fixed;
             }
 
             .content {
                 margin-left: 0;
+            }
+
+            .toggle-btn {
+                display: inline-block;
             }
         }
     </style>
 </head>
 
 <body>
-
-    <!-- BOTÃO DE MENU -->
-    <button id="toggleSidebar" class="toggle-btn">
-        <i class="fa-solid fa-bars"></i>
-    </button>
+    <!-- TOP BAR -->
+    <div class="topbar">
+        <button id="toggleSidebar" class="toggle-btn">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <h5>VizinApp</h5>
+    </div>
 
     <!-- SIDEBAR -->
     <div id="sidebar" class="sidebar">
         <div>
             <div class="logo">
-                <i class="fa-solid fa-building"></i> <span>VizinApp</span>
+                <i class="fa-solid fa-building"></i> VizinApp
                 <small>Gestão Inteligente</small>
             </div>
 
             <nav class="nav flex-column mt-3">
-                <a asp-controller="Dashboard" asp-action="Index" class="nav-link active"><i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></a>
-                <a asp-controller="Imovel" asp-action="Index" class="nav-link"><i class="fa-solid fa-house"></i> <span>Imóveis</span></a>
-                <a asp-controller="Condomino" asp-action="Index" class="nav-link"><i class="fa-solid fa-users"></i> <span>Pessoas</span></a>
-                <a asp-controller="Contratos" asp-action="Index" class="nav-link"><i class="fa-solid fa-file-contract"></i> <span>Contratos</span></a>
-                <a asp-controller="Financeiro" asp-action="Index" class="nav-link"><i class="fa-solid fa-sack-dollar"></i> <span>Financeiro</span></a>
-                <a asp-controller="Vistorias" asp-action="Index" class="nav-link"><i class="fa-solid fa-clipboard-check"></i> <span>Vistorias</span></a>
-                <a asp-controller="Manutencoes" asp-action="Index" class="nav-link"><i class="fa-solid fa-screwdriver-wrench"></i> <span>Manutenções</span></a>
-                <a asp-controller="Comunicacao" asp-action="Index" class="nav-link"><i class="fa-solid fa-comments"></i> <span>Comunicação</span></a>
-                <a asp-controller="Acesso" asp-action="Index" class="nav-link"><i class="fa-solid fa-door-open"></i> <span>Controle de Acesso</span></a>
-                <a asp-controller="Relatorios" asp-action="Index" class="nav-link"><i class="fa-solid fa-chart-pie"></i> <span>Relatórios</span></a>
+                <a asp-controller="Dashboard" asp-action="Index" class="nav-link active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a asp-controller="Imovel" asp-action="Index" class="nav-link"><i class="fa-solid fa-house"></i> Imóveis</a>
+                <a asp-controller="Condomino" asp-action="Index" class="nav-link"><i class="fa-solid fa-users"></i> Pessoas</a>
+                <a asp-controller="Contratos" asp-action="Index" class="nav-link"><i class="fa-solid fa-file-contract"></i> Contratos</a>
+                <a asp-controller="Financeiro" asp-action="Index" class="nav-link"><i class="fa-solid fa-sack-dollar"></i> Financeiro</a>
+                <a asp-controller="Vistorias" asp-action="Index" class="nav-link"><i class="fa-solid fa-clipboard-check"></i> Vistorias</a>
+                <a asp-controller="Manutencoes" asp-action="Index" class="nav-link"><i class="fa-solid fa-screwdriver-wrench"></i> Manutenções</a>
+                <a asp-controller="Comunicacao" asp-action="Index" class="nav-link"><i class="fa-solid fa-comments"></i> Comunicação</a>
+                <a asp-controller="Acesso" asp-action="Index" class="nav-link"><i class="fa-solid fa-door-open"></i> Controle de Acesso</a>
+                <a asp-controller="Relatorios" asp-action="Index" class="nav-link"><i class="fa-solid fa-chart-pie"></i> Relatórios</a>
             </nav>
         </div>
 
         <div class="bottom">
             <div class="user-info">
-                <i class="fa-solid fa-user-circle"></i> <span>Admin Sistema</span>
+                <i class="fa-solid fa-user-circle"></i> Admin Sistema
                 <small>Administrador</small>
             </div>
             <a asp-controller="Usuario" asp-action="Logout" class="btn btn-logout">
@@ -191,6 +219,9 @@
             </a>
         </div>
     </div>
+
+    <!-- BACKDROP -->
+    <div id="backdrop" class="backdrop"></div>
 
     <!-- CONTEÚDO -->
     <div class="content">
@@ -202,15 +233,25 @@
     <script>
         const sidebar = document.getElementById('sidebar');
         const toggleBtn = document.getElementById('toggleSidebar');
+        const backdrop = document.getElementById('backdrop');
 
+        // Abre/fecha o menu
         toggleBtn.addEventListener('click', () => {
-            if (window.innerWidth < 992) {
-                sidebar.classList.toggle('active');
+            const isActive = sidebar.classList.contains('active');
+            if (isActive) {
+                sidebar.classList.remove('active');
+                backdrop.classList.remove('active');
             } else {
-                sidebar.classList.toggle('collapsed');
+                sidebar.classList.add('active');
+                backdrop.classList.add('active');
             }
+        });
+
+        // Fecha o menu ao clicar fora
+        backdrop.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            backdrop.classList.remove('active');
         });
     </script>
 </body>
-
 </html>
