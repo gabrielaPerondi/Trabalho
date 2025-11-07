@@ -1,35 +1,40 @@
 @{
-    ViewData["Title"] = "Área do Morador";
-    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+    Layout = "~/Views/Shared/_LayoutMorador.cshtml";
 }
 
 <div class="container mt-4">
     <h2 class="text-primary mb-4">
-        <i class="fa-solid fa-user"></i> Bem-vindo, @ViewBag.NomeUsuario!
+        <i class="fa-solid fa-user"></i> Minha Área - Bem-vindo, @ViewBag.NomeUsuario!
     </h2>
 
     <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card shadow-sm p-3">
-                <h5>Minhas Reservas</h5>
-                <p class="text-muted mb-2">Gerencie suas reservas de áreas comuns</p>
-                <a href="#" class="btn btn-outline-primary btn-sm">Ver Reservas</a>
+        <!-- Card: Meu Imóvel -->
+        <div class="col-md-12">
+            <div class="card shadow-sm p-3 border-primary">
+                <h5><i class="fa-solid fa-house"></i> Meu Imóvel</h5>
+                <p class="text-muted mb-2">Código: APT-101</p>
+                <p class="text-muted mb-2">Endereço: Rua das Flores, 123 - Apt 101</p>
+                <p class="text-success mb-0">Valor do Aluguel: R$ 1.800</p>
             </div>
         </div>
 
+        <!-- Card: Contrato / Pagamentos / Avisos -->
         <div class="col-md-4">
-            <div class="card shadow-sm p-3">
-                <h5>Minhas Faturas</h5>
-                <p class="text-muted mb-2">Visualize e pague suas faturas</p>
-                <a href="#" class="btn btn-outline-success btn-sm">Ver Faturas</a>
+            <div class="card shadow-sm p-3 border-info">
+                <h6>Meu Contrato</h6>
+                <p>CT-2024-001<br/>Vence em 64 dias</p>
             </div>
         </div>
-
         <div class="col-md-4">
-            <div class="card shadow-sm p-3">
-                <h5>Comunicados</h5>
-                <p class="text-muted mb-2">Veja avisos e mensagens do condomínio</p>
-                <a href="#" class="btn btn-outline-warning btn-sm">Ver Comunicados</a>
+            <div class="card shadow-sm p-3 border-success">
+                <h6>Último Pagamento</h6>
+                <p>09/10/2025 - <span class="badge bg-success">Em dia</span></p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3 border-warning">
+                <h6>Avisos</h6>
+                <p>2 novos</p>
             </div>
         </div>
     </div>

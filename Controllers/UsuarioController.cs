@@ -16,6 +16,7 @@ namespace TrabalhoElvis2.Controllers
             _context = context;
         }
 
+        // === CADASTRAR ===
         public IActionResult Cadastrar()
         {
             return View();
@@ -24,59 +25,84 @@ namespace TrabalhoElvis2.Controllers
         [HttpPost]
         public IActionResult Cadastrar(Usuario usuario)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(usuario);
+
+            try
             {
-                try
+                // Normaliza e remove espaços do tipo
+                usuario.TipoUsuario = usuario.TipoUsuario?.Trim() ?? string.Empty;
+
+                // === Preenche automaticamente dados conforme o tipo ===
+                if (usuario.TipoUsuario.Equals("Administrador", StringComparison.OrdinalIgnoreCase))
                 {
-                    _context.Usuarios.Add(usuario);
-                    _context.SaveChanges();
-
-                    // Guarda o tipo de usuário e ID pra redirecionar
-                    HttpContext.Session.SetString("TipoUsuario", usuario.TipoUsuario);
-                    HttpContext.Session.SetString("NomeUsuario", usuario.NomeAdministrador ?? usuario.NomeCompleto);
-                    HttpContext.Session.SetInt32("IdUsuario", usuario.Id);
-
-
-                    // Redireciona direto pra interface correspondente
-                    switch (usuario.TipoUsuario)
-                    {
-                        case "Administrador":
-                            return RedirectToAction("Index", "Dashboard");
-
-                        case "Síndico":
-                            return RedirectToAction("InterfaceSindico", "Usuario");
-
-                        case "Morador":
-                            return RedirectToAction("InterfaceMorador", "Usuario");
-
-                        default:
-                            return RedirectToAction("Login", "Usuario");
-                    }
+                    if (string.IsNullOrEmpty(usuario.NomeAdministrador))
+                        usuario.NomeAdministrador = "Administrador do sistema";
                 }
-                catch (Exception ex)
+                else if (usuario.TipoUsuario.Equals("Síndico", StringComparison.OrdinalIgnoreCase))
                 {
-                    Console.WriteLine($"Erro ao salvar: {ex.Message}");
-                    ModelState.AddModelError("", "Erro ao salvar no banco de dados.");
+                    if (string.IsNullOrEmpty(usuario.NomeCompleto))
+                        usuario.NomeCompleto = "Síndico não identificado";
+
+                    if (string.IsNullOrEmpty(usuario.Telefone))
+                        usuario.Telefone = "Não informado";
+                }
+                else if (usuario.TipoUsuario.Equals("Morador", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (string.IsNullOrEmpty(usuario.NomeCompleto))
+                        usuario.NomeCompleto = "Morador não identificado";
+
+                    if (string.IsNullOrEmpty(usuario.Apartamento))
+                        usuario.Apartamento = "N/D";
+                }
+                else
+                {
+                    // Caso algum tipo inesperado chegue
+                    usuario.TipoUsuario = "Outro";
+                    usuario.NomeCompleto ??= "Usuário não identificado";
+                }
+
+                // === Grava o usuário no banco ===
+                _context.Usuarios.Add(usuario);
+                _context.SaveChanges();
+
+                // === Armazena na sessão ===
+                HttpContext.Session.SetString("TipoUsuario", usuario.TipoUsuario);
+                HttpContext.Session.SetString("NomeUsuario", usuario.NomeAdministrador ?? usuario.NomeCompleto);
+                HttpContext.Session.SetInt32("IdUsuario", usuario.Id);
+
+                // === Redireciona conforme o tipo ===
+                switch (usuario.TipoUsuario)
+                {
+                    case "Administrador":
+                        return RedirectToAction("Index", "Dashboard");
+
+                    case "Síndico":
+                        return RedirectToAction("InterfaceSindico", "Usuario");
+
+                    case "Morador":
+                        return RedirectToAction("InterfaceMorador", "Usuario");
+
+                    default:
+                        return RedirectToAction("Login", "Usuario");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                foreach (var erro in ModelState.Values.SelectMany(v => v.Errors))
-                {
-                    Console.WriteLine($"Erro: {erro.ErrorMessage}");
-                }
+                Console.WriteLine($"Erro ao salvar: {ex.Message}");
+                ModelState.AddModelError("", "Erro ao salvar no banco de dados.");
             }
 
             return View(usuario);
         }
 
+        // === LOGIN ===
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
-        // --- POST: LOGIN ---
         [HttpPost]
         public IActionResult Login(string email, string senha, string tipoUsuario)
         {
@@ -86,11 +112,12 @@ namespace TrabalhoElvis2.Controllers
                 return View();
             }
 
+            // Normaliza texto (remove acentos e coloca em minúsculo)
             string Normalizar(string texto)
             {
                 return new string(texto
-                    .Normalize(System.Text.NormalizationForm.FormD)
-                    .Where(ch => System.Globalization.CharUnicodeInfo.GetUnicodeCategory(ch) != System.Globalization.UnicodeCategory.NonSpacingMark)
+                    .Normalize(NormalizationForm.FormD)
+                    .Where(ch => CharUnicodeInfo.GetUnicodeCategory(ch) != UnicodeCategory.NonSpacingMark)
                     .ToArray())
                     .ToLower();
             }
@@ -110,12 +137,12 @@ namespace TrabalhoElvis2.Controllers
                 return View();
             }
 
-            //  Guarda na sessão
+            // Guarda sessão
             HttpContext.Session.SetString("TipoUsuario", usuario.TipoUsuario);
             HttpContext.Session.SetString("NomeUsuario", usuario.NomeAdministrador ?? usuario.NomeCompleto);
             HttpContext.Session.SetInt32("IdUsuario", usuario.Id);
 
-            // === Redirecionamento por tipo de usuário ===
+            // Redireciona conforme o tipo
             switch (usuario.TipoUsuario)
             {
                 case "Administrador":
@@ -129,9 +156,7 @@ namespace TrabalhoElvis2.Controllers
             }
         }
 
-
-
-        // --- INTERFACE ---
+        // === INTERFACE ===
         public IActionResult Interface()
         {
             var tipo = TempData["TipoUsuario"]?.ToString();
@@ -155,16 +180,16 @@ namespace TrabalhoElvis2.Controllers
             }
         }
 
-        // --- LOGOUT ---
+        // === LOGOUT ===
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }
 
+        // === INTERFACES ESPECÍFICAS ===
         public IActionResult InterfaceMorador()
         {
-            // Garante que só moradores acessem
             var tipo = HttpContext.Session.GetString("TipoUsuario");
             if (tipo != "Morador")
             {
@@ -172,7 +197,6 @@ namespace TrabalhoElvis2.Controllers
                 return RedirectToAction("Login");
             }
 
-            // Recupera informações do usuário logado
             ViewBag.NomeUsuario = HttpContext.Session.GetString("NomeUsuario");
             ViewBag.IdUsuario = HttpContext.Session.GetInt32("IdUsuario");
 
@@ -181,7 +205,6 @@ namespace TrabalhoElvis2.Controllers
 
         public IActionResult InterfaceSindico()
         {
-            // Permite apenas acesso do síndico
             var tipo = HttpContext.Session.GetString("TipoUsuario");
             if (tipo != "Síndico")
             {
@@ -189,13 +212,10 @@ namespace TrabalhoElvis2.Controllers
                 return RedirectToAction("Login");
             }
 
-            // Envia dados do usuário logado para a View
             ViewBag.NomeUsuario = HttpContext.Session.GetString("NomeUsuario");
             ViewBag.IdUsuario = HttpContext.Session.GetInt32("IdUsuario");
 
             return View();
         }
-
     }
 }
-

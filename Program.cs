@@ -8,7 +8,7 @@ builder.Services.AddDbContext<LoginContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoPadrao"))
 );
 
-//  Habilita o uso de sessão
+// Habilita o uso de sessão
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30); // expira em 30 minutos sem uso
@@ -16,7 +16,11 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+// Adiciona suporte a MVC
 builder.Services.AddControllersWithViews();
+
+// ✅ Adiciona o HttpContextAccessor para permitir uso de Session em layouts
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -31,11 +35,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// Adiciona o middleware de sessão aqui
+// Middleware de sessão
 app.UseSession();
 
 app.UseAuthorization();
 
+// Rota padrão
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Usuario}/{action=Login}/{id?}"

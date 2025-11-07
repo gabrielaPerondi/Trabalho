@@ -22,8 +22,13 @@ namespace TrabalhoElvis2.Models
         public string? NomeCondominio { get; set; }
         public string? Cnpj { get; set; }
 
-        // --- Campos do Morador ---
+        // --- Campos do Morador / Síndico ---
         public string? NomeCompleto { get; set; }
         public string? Apartamento { get; set; }
+
+        // --- Novo campo compartilhado (usado pelo Síndico e outros) ---
+        [Phone(ErrorMessage = "Digite um número de telefone válido.")]
+        [StringLength(20, ErrorMessage = "O telefone deve ter até 20 caracteres.")]
+        public string? Telefone { get; set; }
     }
 }

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\429410624\\Downloads\\MVC\\projetocondomino\\Trabalho\\TrabalhoElvis2.csproj": {}
+    "C:\\Users\\426133624\\Documents\\TralaboElviso2\\Trabalho\\TrabalhoElvis2.csproj": {}
   },
   "projects": {
-    "C:\\Users\\429410624\\Downloads\\MVC\\projetocondomino\\Trabalho\\TrabalhoElvis2.csproj": {
+    "C:\\Users\\426133624\\Documents\\TralaboElviso2\\Trabalho\\TrabalhoElvis2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\429410624\\Downloads\\MVC\\projetocondomino\\Trabalho\\TrabalhoElvis2.csproj",
+        "projectUniqueName": "C:\\Users\\426133624\\Documents\\TralaboElviso2\\Trabalho\\TrabalhoElvis2.csproj",
         "projectName": "TrabalhoElvis2",
-        "projectPath": "C:\\Users\\429410624\\Downloads\\MVC\\projetocondomino\\Trabalho\\TrabalhoElvis2.csproj",
-        "packagesPath": "C:\\Users\\429410624\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\429410624\\Downloads\\MVC\\projetocondomino\\Trabalho\\obj\\",
+        "projectPath": "C:\\Users\\426133624\\Documents\\TralaboElviso2\\Trabalho\\TrabalhoElvis2.csproj",
+        "packagesPath": "C:\\Users\\426133624\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\426133624\\Documents\\TralaboElviso2\\Trabalho\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\429410624\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\426133624\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -50,6 +50,12 @@
               "version": "[9.0.10, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[9.0.10, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.10, )"
             }
