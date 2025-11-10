@@ -4727,11 +4727,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\429438624\\Documents\\Projeto\\TralaboElsiv2\\TrabalhoElvis2.csproj",
+      "projectUniqueName": "C:\\Users\\429438624\\Documents\\Projeto\\Trabalho\\TrabalhoElvis2.csproj",
       "projectName": "TrabalhoElvis2",
-      "projectPath": "C:\\Users\\429438624\\Documents\\Projeto\\TralaboElsiv2\\TrabalhoElvis2.csproj",
+      "projectPath": "C:\\Users\\429438624\\Documents\\Projeto\\Trabalho\\TrabalhoElvis2.csproj",
       "packagesPath": "C:\\Users\\429438624\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\429438624\\Documents\\Projeto\\TralaboElsiv2\\obj\\",
+      "outputPath": "C:\\Users\\429438624\\Documents\\Projeto\\Trabalho\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\429438624\\AppData\\Roaming\\NuGet\\NuGet.Config"

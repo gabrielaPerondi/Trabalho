@@ -12,7 +12,7 @@ using TrabalhoElvis2.Context;
 namespace TrabalhoElvis2.Migrations
 {
     [DbContext(typeof(LoginContext))]
-    [Migration("20251110182527_cadastr")]
+    [Migration("20251110183343_cadastr")]
     partial class cadastr
     {
         /// <inheritdoc />

@@ -4,76 +4,84 @@
     ViewData["Title"] = "Cadastro de Usuário";
 }
 
-<h2 style="text-align:center; color:#4682b4;">Cadastro de Usuário</h2>
-<hr>
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">Cadastro de Usuário</h2>
 
-<form asp-action="Cadastrar" asp-controller="Usuario" method="post" style="max-width:600px; margin:auto;">
-    <div class="form-group">
-        <label asp-for="TipoUsuario"></label>
-        <select asp-for="TipoUsuario" class="form-control" required>
-            <option value="">Selecione...</option>
-            <option value="Administrador">Administrador</option>
-            <option value="Síndico">Síndico</option>
-            <option value="Morador">Morador</option>
-        </select>
-        <span asp-validation-for="TipoUsuario" class="text-danger"></span>
-    </div>
-
-    <div class="form-group mt-3">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" placeholder="seu@email.com" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-
-    <div class="form-group mt-3">
-        <label asp-for="Senha"></label>
-        <input asp-for="Senha" class="form-control" type="password" placeholder="Digite uma senha" />
-        <span asp-validation-for="Senha" class="text-danger"></span>
-    </div>
-
-    <!-- Campos Administrador -->
-    <div id="camposAdmin" style="display:none;">
-        <h4 class="mt-4 text-primary">Informações do Administrador</h4>
-        <div class="form-group">
-            <label asp-for="NomeAdministrador"></label>
-            <input asp-for="NomeAdministrador" class="form-control" />
+    <form asp-action="Cadastrar" asp-controller="Usuario" method="post" class="shadow p-4 rounded bg-white">
+        <div class="form-group mb-3">
+            <label asp-for="TipoUsuario" class="fw-bold"></label>
+            <select asp-for="TipoUsuario" class="form-control" required>
+                <option value="">Selecione...</option>
+                <option value="Administrador">Administrador</option>
+                <option value="Síndico">Síndico</option>
+                <option value="Morador">Morador</option>
+            </select>
+            <span asp-validation-for="TipoUsuario" class="text-danger"></span>
         </div>
-        <div class="form-group">
-            <label asp-for="NomeCondominio"></label>
-            <input asp-for="NomeCondominio" class="form-control" />
-        </div>
-        <div class="form-group">
-            <label asp-for="Cnpj"></label>
-            <input asp-for="Cnpj" class="form-control" />
-        </div>
-    </div>
 
-    <!-- Campos Morador -->
-    <div id="camposMorador" style="display:none;">
-        <h4 class="mt-4 text-primary">Informações do Morador</h4>
-        <div class="form-group">
-            <label asp-for="NomeCompleto"></label>
-            <input asp-for="NomeCompleto" class="form-control" />
+        <div class="form-group mb-3">
+            <label asp-for="Email" class="fw-bold"></label>
+            <input asp-for="Email" class="form-control" placeholder="seu@email.com" />
+            <span asp-validation-for="Email" class="text-danger"></span>
         </div>
-        <div class="form-group">
-            <label asp-for="Apartamento"></label>
-            <input asp-for="Apartamento" class="form-control" />
-        </div>
-    </div>
 
-    <div class="text-center mt-4">
-        <button type="submit" class="btn btn-primary">Cadastrar</button>
-    </div>
-</form>
+        <div class="form-group mb-3">
+            <label asp-for="Senha" class="fw-bold"></label>
+            <input asp-for="Senha" class="form-control" type="password" placeholder="Digite uma senha" />
+            <span asp-validation-for="Senha" class="text-danger"></span>
+        </div>
+
+        <!-- Campos Administrador -->
+        <div id="camposAdmin" class="mt-4" style="display:none;">
+            <h4 class="text-primary mb-3">Informações do Administrador</h4>
+            <div class="form-group mb-2">
+                <label asp-for="NomeAdministrador"></label>
+                <input asp-for="NomeAdministrador" class="form-control" />
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="NomeCondominio"></label>
+                <input asp-for="NomeCondominio" class="form-control" />
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="Cnpj"></label>
+                <input asp-for="Cnpj" class="form-control" />
+            </div>
+        </div>
+
+        <!-- Campos Morador -->
+        <div id="camposMorador" class="mt-4" style="display:none;">
+            <h4 class="text-primary mb-3">Informações do Morador</h4>
+            <div class="form-group mb-2">
+                <label asp-for="NomeCompleto"></label>
+                <input asp-for="NomeCompleto" class="form-control" />
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="Apartamento"></label>
+                <input asp-for="Apartamento" class="form-control" />
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary px-5">Cadastrar</button>
+        </div>
+    </form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        const tipoSelect = document.getElementById("TipoUsuario");
+        const tipoSelect = document.querySelector('[name="TipoUsuario"]');
         const camposAdmin = document.getElementById("camposAdmin");
         const camposMorador = document.getElementById("camposMorador");
 
         tipoSelect.addEventListener("change", () => {
+            const tipo = tipoSelect.value;
+            camposAdmin.style.display = tipo === "Administrador" ? "block" : "none";
+            camposMorador.style.display = tipo === "Morador" ? "block" : "none";
+        });
+
+        // Exibe os campos corretos ao carregar a página
+        window.addEventListener("DOMContentLoaded", () => {
             const tipo = tipoSelect.value;
             camposAdmin.style.display = tipo === "Administrador" ? "block" : "none";
             camposMorador.style.display = tipo === "Morador" ? "block" : "none";

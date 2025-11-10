@@ -75,13 +75,13 @@ namespace TrabalhoElvis2.Controllers
                 switch (usuario.TipoUsuario)
                 {
                     case "Administrador":
-                        return RedirectToAction("Index", "Dashboard");
+                        return RedirectToAction("Index", "Dashboard"); // Dashboard do Admin
 
                     case "Síndico":
-                        return RedirectToAction("InterfaceSindico", "Usuario");
+                        return RedirectToAction("InterfaceSindico", "Usuario"); // Dashboard do Síndico
 
                     case "Morador":
-                        return RedirectToAction("InterfaceMorador", "Usuario");
+                        return RedirectToAction("InterfaceMorador", "Usuario"); // Dashboard do Morador
 
                     default:
                         return RedirectToAction("Login", "Usuario");
@@ -146,13 +146,16 @@ namespace TrabalhoElvis2.Controllers
             switch (usuario.TipoUsuario)
             {
                 case "Administrador":
-                    return RedirectToAction("Index", "Dashboard");
+                    return RedirectToAction("Index", "Dashboard"); // Dashboard do Admin
+
                 case "Síndico":
-                    return RedirectToAction("InterfaceSindico");
+                    return RedirectToAction("InterfaceSindico", "Usuario"); // Dashboard do Síndico
+
                 case "Morador":
-                    return RedirectToAction("InterfaceMorador");
+                    return RedirectToAction("InterfaceMorador", "Usuario"); // Dashboard do Morador
+
                 default:
-                    return RedirectToAction("Login");
+                    return RedirectToAction("Login", "Usuario");
             }
         }
 
