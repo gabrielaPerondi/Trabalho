@@ -12,8 +12,8 @@ using TrabalhoElvis2.Context;
 namespace TrabalhoElvis2.Migrations
 {
     [DbContext(typeof(LoginContext))]
-    [Migration("20251105185412_AtualizarMigr")]
-    partial class AtualizarMigr
+    [Migration("20251110182527_cadastr")]
+    partial class cadastr
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -198,7 +198,7 @@ namespace TrabalhoElvis2.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<int?>("CondominoId")
+                    b.Property<int>("CondominoId")
                         .HasColumnType("int");
 
                     b.Property<double>("Metragem")
@@ -262,6 +262,10 @@ namespace TrabalhoElvis2.Migrations
                         .HasMaxLength(12)
                         .HasColumnType("nvarchar(12)");
 
+                    b.Property<string>("Telefone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<string>("TipoUsuario")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -303,7 +307,9 @@ namespace TrabalhoElvis2.Migrations
                 {
                     b.HasOne("TrabalhoElvis2.Models.Condomino", "Condomino")
                         .WithMany()
-                        .HasForeignKey("CondominoId");
+                        .HasForeignKey("CondominoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Condomino");
                 });

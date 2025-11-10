@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TrabalhoElvis2.Migrations
 {
     /// <inheritdoc />
-    public partial class dadosbanco : Migration
+    public partial class cadastr : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,14 +18,16 @@ namespace TrabalhoElvis2.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NomeCompleto = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Cpf = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CPF = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Telefone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Tipo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Cargo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Turno = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     InicioLocacao = table.Column<DateTime>(type: "datetime2", nullable: true),
                     FimLocacao = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ValorAluguel = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
-                    Observacoes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Ativo = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -62,7 +64,8 @@ namespace TrabalhoElvis2.Migrations
                     NomeCondominio = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Cnpj = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NomeCompleto = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Apartamento = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Apartamento = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Telefone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -77,13 +80,13 @@ namespace TrabalhoElvis2.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Codigo = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Tipo = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Quartos = table.Column<int>(type: "int", nullable: false),
-                    Banheiros = table.Column<int>(type: "int", nullable: false),
+                    Quartos = table.Column<int>(type: "int", nullable: true),
+                    Banheiros = table.Column<int>(type: "int", nullable: true),
                     Metragem = table.Column<double>(type: "float", nullable: false),
-                    ValorAluguel = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    ValorAluguel = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
                     Observacoes = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
-                    CondominoId = table.Column<int>(type: "int", nullable: true)
+                    CondominoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -92,7 +95,8 @@ namespace TrabalhoElvis2.Migrations
                         name: "FK_Imoveis_Condominos_CondominoId",
                         column: x => x.CondominoId,
                         principalTable: "Condominos",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -119,10 +123,50 @@ namespace TrabalhoElvis2.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Contratos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NumeroContrato = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImovelId = table.Column<int>(type: "int", nullable: false),
+                    CondominoId = table.Column<int>(type: "int", nullable: true),
+                    Valor = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataTermino = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contratos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Contratos_Condominos_CondominoId",
+                        column: x => x.CondominoId,
+                        principalTable: "Condominos",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Contratos_Imoveis_ImovelId",
+                        column: x => x.ImovelId,
+                        principalTable: "Imoveis",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Condominios_AdminUsuarioId",
                 table: "Condominios",
                 column: "AdminUsuarioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Contratos_CondominoId",
+                table: "Contratos",
+                column: "CondominoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Contratos_ImovelId",
+                table: "Contratos",
+                column: "ImovelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Imoveis_CondominoId",
@@ -137,13 +181,16 @@ namespace TrabalhoElvis2.Migrations
                 name: "Condominios");
 
             migrationBuilder.DropTable(
+                name: "Contratos");
+
+            migrationBuilder.DropTable(
                 name: "Funcionarios");
 
             migrationBuilder.DropTable(
-                name: "Imoveis");
+                name: "Usuarios");
 
             migrationBuilder.DropTable(
-                name: "Usuarios");
+                name: "Imoveis");
 
             migrationBuilder.DropTable(
                 name: "Condominos");
