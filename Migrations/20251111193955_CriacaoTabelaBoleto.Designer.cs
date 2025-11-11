@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrabalhoElvis2.Context;
 
@@ -11,9 +12,11 @@ using TrabalhoElvis2.Context;
 namespace TrabalhoElvis2.Migrations
 {
     [DbContext(typeof(LoginContext))]
-    partial class LoginContextModelSnapshot : ModelSnapshot
+    [Migration("20251111193955_CriacaoTabelaBoleto")]
+    partial class CriacaoTabelaBoleto
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,13 +87,8 @@ namespace TrabalhoElvis2.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-<<<<<<< HEAD
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-=======
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
->>>>>>> 61ea956 (commit)
 
                     b.Property<decimal>("Valor")
                         .HasColumnType("decimal(10,2)");
@@ -335,11 +333,7 @@ namespace TrabalhoElvis2.Migrations
             modelBuilder.Entity("TrabalhoElvis2.Models.Boleto", b =>
                 {
                     b.HasOne("Trabalho.Models.Contrato", "Contrato")
-<<<<<<< HEAD
-                        .WithMany("Boletos")
-=======
                         .WithMany()
->>>>>>> 61ea956 (commit)
                         .HasForeignKey("ContratoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -367,11 +361,6 @@ namespace TrabalhoElvis2.Migrations
                         .IsRequired();
 
                     b.Navigation("Condomino");
-                });
-
-            modelBuilder.Entity("Trabalho.Models.Contrato", b =>
-                {
-                    b.Navigation("Boletos");
                 });
 #pragma warning restore 612, 618
         }

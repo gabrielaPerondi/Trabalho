@@ -1,0 +1,162 @@
+@model IEnumerable<TrabalhoElvis2.Models.Boleto>
+
+@{
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+    ViewData["Title"] = "Financeiro - Administrador";
+}
+
+
+<div class="container-fluid px-4">
+    <h2 class="mt-4 fw-bold text-primary">Financeiro - Administrador</h2>
+    <p class="text-muted mb-4">Controle completo do sistema financeiro</p>
+
+    @if (TempData["MensagemSucesso"] != null)
+    {
+        <div class="alert alert-success">@TempData["MensagemSucesso"]</div>
+    }
+
+    <!-- ===== CARDS DE RESUMO ===== -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Receita Prevista</p>
+                    <h4>R$ @ViewBag.ReceitaPrevista.ToString("N2")</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Receita Recebida</p>
+                    <h4 class="text-success">R$ @ViewBag.ReceitaRecebida.ToString("N2")</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Inadimplência</p>
+                    <h4 class="text-danger">R$ @ViewBag.Inadimplencia.ToString("N2")</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Taxa de Ocupação</p>
+                    <h4>87.5%</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FILTRO ===== -->
+    <form method="get" asp-action="Administrador" class="row mb-3">
+        <div class="col-md-3">
+            <select name="filtro" class="form-select" onchange="this.form.submit()">
+                <option value="Todos">Todos</option>
+                <option value="Pago">Pago</option>
+                <option value="Pendente">Pendente</option>
+                <option value="Vencido">Vencido</option>
+            </select>
+        </div>
+    </form>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold">Boletos</h5>
+        <a asp-action="CriarBoleto" class="btn btn-primary">
+            <i class="fa-solid fa-plus"></i> Novo Boleto
+        </a>
+    </div>
+
+
+    <!-- ===== TABELA ===== -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="fw-bold mb-3">Boletos</h5>
+
+            <table class="table align-middle table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Imóvel</th>
+                        <th>Morador</th>
+                        <th>Vencimento</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                        <th>QR Code</th>
+                        <th>Comprovante</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var b in Model)
+                    {
+                        <tr>
+                            <td>@b.Contrato?.Imovel?.Codigo</td>
+                            <td>@b.Contrato?.Condomino?.NomeCompleto</td>
+                            <td>@b.Vencimento.ToString("dd/MM/yyyy")</td>
+                            <td>R$ @b.Valor.ToString("N2")</td>
+
+                            <td>
+                                @if (b.Status == "Pago")
+                                {
+                                    <span class="badge bg-success">Pago</span>
+                                }
+                                else if (b.Status == "Pendente")
+                                {
+                                    <span class="badge bg-warning text-dark">Pendente</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Vencido</span>
+                                }
+                            </td>
+
+                            <td>
+                                @if (!string.IsNullOrEmpty(b.QrCodePix))
+                                {
+                                    <img src="@b.QrCodePix" width="60" />
+                                }
+                                else
+                                {
+                                    <form asp-action="GerarQrCode" method="post">
+                                        <input type="hidden" name="id" value="@b.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-primary">Gerar QR</button>
+                                    </form>
+                                }
+                            </td>
+
+                            <td>
+                                @if (!string.IsNullOrEmpty(b.ComprovantePagamento))
+                                {
+                                    <a href="@b.ComprovantePagamento" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                        Ver
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Nenhum</span>
+                                }
+                            </td>
+
+                            <td>
+                                @if (b.Status == "Pendente" && !string.IsNullOrEmpty(b.ComprovantePagamento))
+                                {
+                                    <form asp-action="ConfirmarPagamento" method="post">
+                                        <input type="hidden" name="id" value="@b.Id" />
+                                        <button type="submit" class="btn btn-sm btn-success">Confirmar</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">-</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

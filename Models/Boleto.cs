@@ -8,6 +8,7 @@ namespace TrabalhoElvis2.Models
     public class Boleto
     {
         public int Id { get; set; }
+<<<<<<< HEAD
 
         [Required]
         public int ContratoId { get; set; }
@@ -36,5 +37,21 @@ namespace TrabalhoElvis2.Models
 
         // Comprovante enviado pelo morador (imagem)
         public string? ComprovantePagamento { get; set; }
+=======
+        public int ContratoId { get; set; }
+        public Contrato? Contrato { get; set; }
+
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal Valor { get; set; }
+        public DateTime Vencimento { get; set; }
+        public DateTime? Pagamento { get; set; }
+
+        [Required]
+        [StringLength(20)]
+        public string Status { get; set; } = "Pendente"; // Pendente, Pago, Vencido
+
+        public string? QrCodePix { get; set; }              // Caminho do QR gerado
+        public string? ComprovantePagamento { get; set; }   // Caminho do comprovante enviado
+>>>>>>> 61ea956 (commit)
     }
 }

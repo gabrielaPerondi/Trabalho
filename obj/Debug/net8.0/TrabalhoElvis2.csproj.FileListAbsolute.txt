@@ -1151,9 +1151,6 @@ C:\Users\429438624\Documents\Projeto\Trabalho\bin\Debug\net8.0\runtimes\win-arm\
 C:\Users\429438624\Documents\Projeto\Trabalho\bin\Debug\net8.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Users\429438624\Documents\Projeto\Trabalho\bin\Debug\net8.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Users\429438624\Documents\Projeto\Trabalho\bin\Debug\net8.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
-C:\Users\429438624\Documents\Projeto\Trabalho\bin\Debug\net8.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
-C:\Users\429438624\Documents\Projeto\Trabalho\bin\Debug\net8.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
-C:\Users\429438624\Documents\Projeto\Trabalho\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
 C:\Users\429438624\Documents\Projeto\Trabalho\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 C:\Users\429438624\Documents\Projeto\Trabalho\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\429438624\Documents\Projeto\Trabalho\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
@@ -1183,6 +1180,7 @@ C:\Users\429438624\Documents\Projeto\Trabalho\obj\Debug\net8.0\refint\TrabalhoEl
 C:\Users\429438624\Documents\Projeto\Trabalho\obj\Debug\net8.0\TrabalhoElvis2.pdb
 C:\Users\429438624\Documents\Projeto\Trabalho\obj\Debug\net8.0\TrabalhoElvis2.genruntimeconfig.cache
 C:\Users\429438624\Documents\Projeto\Trabalho\obj\Debug\net8.0\ref\TrabalhoElvis2.dll
+<<<<<<< HEAD
 C:\Users\sara0\OneDrive\Documentos\Projelto\Trabalho\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\sara0\OneDrive\Documentos\Projelto\Trabalho\bin\Debug\net8.0\appsettings.json
 C:\Users\sara0\OneDrive\Documentos\Projelto\Trabalho\bin\Debug\net8.0\TrabalhoElvis2.staticwebassets.runtime.json
@@ -1354,3 +1352,9 @@ C:\Users\sara0\OneDrive\Documentos\Projelto\Trabalho\obj\Debug\net8.0\refint\Tra
 C:\Users\sara0\OneDrive\Documentos\Projelto\Trabalho\obj\Debug\net8.0\TrabalhoElvis2.pdb
 C:\Users\sara0\OneDrive\Documentos\Projelto\Trabalho\obj\Debug\net8.0\TrabalhoElvis2.genruntimeconfig.cache
 C:\Users\sara0\OneDrive\Documentos\Projelto\Trabalho\obj\Debug\net8.0\ref\TrabalhoElvis2.dll
+=======
+C:\Users\429438624\Documents\Projeto\Trabalho\bin\Debug\net8.0\QRCoder.dll
+C:\Users\429438624\Documents\Projeto\Trabalho\bin\Debug\net8.0\System.Private.Windows.Core.dll
+C:\Users\429438624\Documents\Projeto\Trabalho\bin\Debug\net8.0\System.Private.Windows.GdiPlus.dll
+C:\Users\429438624\Documents\Projeto\Trabalho\bin\Debug\net8.0\runtimes\win\lib\net8.0\Microsoft.Win32.SystemEvents.dll
+>>>>>>> 61ea956 (commit)
