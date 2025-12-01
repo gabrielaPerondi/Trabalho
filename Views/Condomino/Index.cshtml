@@ -6,84 +6,105 @@
     var tipoAtual = ViewBag.TipoAtual as string ?? "Proprietario";
 }
 
-<div class="container-fluid mt-4 mb-5">
-    <!-- Cabeçalho -->
-    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
-        <div>
-            <h3 class="fw-semibold text-dark mb-0"><i class="fa-solid fa-users text-primary me-2"></i>Gestão de Condôminos</h3>
-            <p class="text-muted mb-0">Gerencie proprietários, locatários e funcionários do condomínio.</p>
-        </div>
-        <button class="btn btn-primary shadow-sm mt-3 mt-md-0" data-bs-toggle="modal" data-bs-target="#modalCondomino">
+<div class="page-container">
+
+    <!-- ===================== CABEÇALHO ===================== -->
+    <div class="section-wrapper">
+        <h1 class="page-title">
+            <i class="fa-solid fa-users me-2 text-primary"></i>
+            Gestão de Condôminos
+        </h1>
+        <p class="page-subtitle">Gerencie proprietários, locatários e funcionários do condomínio.</p>
+
+        <button class="btn btn-primary shadow-sm mt-3" data-bs-toggle="modal" data-bs-target="#modalCondomino">
             <i class="fa-solid fa-user-plus me-1"></i> Novo Condômino
         </button>
     </div>
 
-    <!-- Cards de resumo -->
-    <div class="row g-3 mb-4">
-        <div class="col-md-4 col-sm-6">
-            <div class="card resumo shadow-sm border-0 p-3 resumo-card" data-tipo="Proprietario" style="cursor:pointer;">
-                <div class="d-flex align-items-center">
-                    <div class="icon bg-primary-subtle text-primary me-3">
-                        <i class="fa-solid fa-user-tie"></i>
-                    </div>
-                    <div>
-                        <small class="text-muted">Proprietários</small>
-                        <h5 class="fw-bold mb-0">@Model.Count(c => c.Tipo == "Proprietario")</h5>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="col-md-4 col-sm-6">
-            <div class="card resumo shadow-sm border-0 p-3 resumo-card" data-tipo="Locatario" style="cursor:pointer;">
-                <div class="d-flex align-items-center">
-                    <div class="icon bg-success-subtle text-success me-3">
-                        <i class="fa-solid fa-key"></i>
-                    </div>
-                    <div>
-                        <small class="text-muted">Locatários</small>
-                        <h5 class="fw-bold mb-0">@Model.Count(c => c.Tipo == "Locatario")</h5>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- ===================== CARDS RESUMO ===================== -->
+    <div class="section-wrapper">
+        <div class="row g-3">
 
-        <div class="col-md-4 col-sm-6">
-            <div class="card resumo shadow-sm border-0 p-3 resumo-card" data-tipo="Funcionario" style="cursor:pointer;">
-                <div class="d-flex align-items-center">
-                    <div class="icon bg-warning-subtle text-warning me-3">
-                        <i class="fa-solid fa-briefcase"></i>
-                    </div>
-                    <div>
-                        <small class="text-muted">Funcionários</small>
-                        <h5 class="fw-bold mb-0">@Model.Count(c => c.Tipo == "Funcionario")</h5>
+            <div class="col-md-4 col-sm-6">
+                <div class="summary-card resumo-card" data-tipo="Proprietario">
+                    <div class="d-flex align-items-center">
+                        <div class="icon bg-primary-subtle text-primary me-3">
+                            <i class="fa-solid fa-user-tie"></i>
+                        </div>
+                        <div>
+                            <small class="text-muted">Proprietários</small>
+                            <h4 class="fw-bold mb-0">@Model.Count(c => c.Tipo == "Proprietario")</h4>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-4 col-sm-6">
+                <div class="summary-card resumo-card" data-tipo="Locatario">
+                    <div class="d-flex align-items-center">
+                        <div class="icon bg-success-subtle text-success me-3">
+                            <i class="fa-solid fa-key"></i>
+                        </div>
+                        <div>
+                            <small class="text-muted">Locatários</small>
+                            <h4 class="fw-bold mb-0">@Model.Count(c => c.Tipo == "Locatario")</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+                <div class="summary-card resumo-card" data-tipo="Funcionario">
+                    <div class="d-flex align-items-center">
+                        <div class="icon bg-warning-subtle text-warning me-3">
+                            <i class="fa-solid fa-briefcase"></i>
+                        </div>
+                        <div>
+                            <small class="text-muted">Funcionários</small>
+                            <h4 class="fw-bold mb-0">@Model.Count(c => c.Tipo == "Funcionario")</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <!-- Barra de busca -->
-    <form method="get" asp-action="Index" class="d-flex flex-wrap align-items-center justify-content-between mb-4">
-        <div class="search-box flex-grow-1 me-2 mb-2 mb-md-0">
-            <input type="text" name="termoBusca" class="form-control" placeholder="Buscar por nome, tipo ou CPF..." value="@(ViewContext.HttpContext.Request.Query["termoBusca"].ToString())" />
-        </div>
-        <select name="tipo" class="form-select w-auto" onchange="this.form.submit()">
-            <option value="Proprietario" selected="@(tipoAtual == "Proprietario")">Proprietário</option>
-            <option value="Locatario" selected="@(tipoAtual == "Locatario")">Locatário</option>
-            <option value="Funcionario" selected="@(tipoAtual == "Funcionario")">Funcionário</option>
-        </select>
-    </form>
 
-    <!-- Lista -->
-    <div class="card border-0 shadow-sm p-3">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h6 class="fw-bold text-secondary mb-0">Lista de Condôminos (@Model.Count())</h6>
-        </div>
+    <!-- ===================== BARRA DE BUSCA ===================== -->
+    <div class="section-wrapper">
+        <form method="get" asp-action="Index" class="row g-3 align-items-end">
 
-        <div class="table-responsive">
+            <div class="col-md-8">
+                <label class="form-label fw-semibold">Buscar Condômino</label>
+                <div class="search-box">
+                    <input type="text" class="form-control" name="termoBusca"
+                        placeholder="Buscar por nome, tipo ou CPF..."
+                        value="@(ViewContext.HttpContext.Request.Query["termoBusca"].ToString())" />
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Tipo</label>
+                <select name="tipo" class="form-select" onchange="this.form.submit()">
+                    <option value="Proprietario" selected="@(tipoAtual == "Proprietario")">Proprietário</option>
+                    <option value="Locatario" selected="@(tipoAtual == "Locatario")">Locatário</option>
+                    <option value="Funcionario" selected="@(tipoAtual == "Funcionario")">Funcionário</option>
+                </select>
+            </div>
+
+        </form>
+    </div>
+
+
+    <!-- ===================== TABELA ===================== -->
+    <div class="section-wrapper">
+        <h5 class="fw-semibold mb-3">Lista de Condôminos (@Model.Count())</h5>
+
+        <div class="table-container">
             <table class="table align-middle mb-0">
-                <thead class="text-muted small">
+                <thead>
                     <tr>
                         <th>Nome</th>
                         <th>Tipo</th>
@@ -92,6 +113,7 @@
                         <th>Status</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     @foreach (var c in Model)
                     {
@@ -101,21 +123,25 @@
                             <td>@c.Telefone</td>
                             <td>@c.Email</td>
                             <td>
-                                <span class="badge @(c.Tipo == "Funcionario" ? "bg-info text-white" :
-                                                    c.Tipo == "Locatario" ? "bg-success text-white" :
-                                                    "bg-dark text-white")">
+                                <span class="badge 
+                                        @(c.Tipo == "Funcionario" ? "bg-info" :
+                                                                            c.Tipo == "Locatario" ? "bg-success" :
+                                                                            "bg-dark") text-white">
                                     @c.Tipo
                                 </span>
                             </td>
                         </tr>
                     }
                 </tbody>
+
             </table>
         </div>
     </div>
+
 </div>
 
-<!-- Modal -->
+
+<!-- ===================== MODAL ===================== -->
 <div class="modal fade" id="modalCondomino" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg">
@@ -123,51 +149,62 @@
                 <h5 class="modal-title fw-semibold">Cadastrar Novo Condômino</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
+
             <div class="modal-body p-4">
                 <form asp-action="Cadastrar" method="post">
+
                     <div class="row g-3">
+
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Tipo</label>
-                            <select id="Tipo" name="Tipo" class="form-select" required>
+                            <select name="Tipo" class="form-select" required>
                                 <option value="">Selecione...</option>
                                 <option value="Proprietario">Proprietário</option>
                                 <option value="Locatario">Locatário</option>
                                 <option value="Funcionario">Funcionário</option>
                             </select>
                         </div>
+
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Nome Completo</label>
                             <input type="text" name="NomeCompleto" class="form-control" required />
                         </div>
+
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">E-mail</label>
                             <input type="email" name="Email" class="form-control" />
                         </div>
+
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Telefone</label>
                             <input type="text" name="Telefone" class="form-control" />
                         </div>
+
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">CPF</label>
                             <input type="text" name="CPF" class="form-control" />
                         </div>
+
                     </div>
 
                     <div class="text-end mt-4">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Salvar</button>
                     </div>
+
                 </form>
             </div>
         </div>
     </div>
 </div>
 
+
 @section Scripts {
     <script>
-        document.querySelectorAll('.resumo-card').forEach(function(card) {
-            card.addEventListener('click', function() {
-                var tipo = card.getAttribute('data-tipo');
+        document.querySelectorAll('.resumo-card').forEach(function (card) {
+            card.addEventListener('click', function () {
+                let tipo = card.getAttribute('data-tipo');
                 window.location.href = '/Condomino?tipo=' + tipo;
             });
         });

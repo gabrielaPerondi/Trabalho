@@ -12,15 +12,15 @@ using TrabalhoElvis2.Context;
 namespace TrabalhoElvis2.Migrations
 {
     [DbContext(typeof(LoginContext))]
-    [Migration("20251113214715_dado")]
-    partial class dado
+    [Migration("20251201170627_Iind")]
+    partial class Iind
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.10")
+                .HasAnnotation("ProductVersion", "8.0.22")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -72,6 +72,10 @@ namespace TrabalhoElvis2.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ChavePix")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("ComprovantePagamento")
                         .HasColumnType("nvarchar(max)");
@@ -239,7 +243,8 @@ namespace TrabalhoElvis2.Migrations
                     b.Property<int>("CondominoId")
                         .HasColumnType("int");
 
-                    b.Property<double>("Metragem")
+                    b.Property<double?>("Metragem")
+                        .IsRequired()
                         .HasColumnType("float");
 
                     b.Property<string>("Observacoes")

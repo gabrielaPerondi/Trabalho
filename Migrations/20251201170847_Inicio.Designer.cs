@@ -12,15 +12,15 @@ using TrabalhoElvis2.Context;
 namespace TrabalhoElvis2.Migrations
 {
     [DbContext(typeof(LoginContext))]
-    [Migration("20251113225349_AddChavePixToBoleto")]
-    partial class AddChavePixToBoleto
+    [Migration("20251201170847_Inicio")]
+    partial class Inicio
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.10")
+                .HasAnnotation("ProductVersion", "8.0.22")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -243,7 +243,8 @@ namespace TrabalhoElvis2.Migrations
                     b.Property<int>("CondominoId")
                         .HasColumnType("int");
 
-                    b.Property<double>("Metragem")
+                    b.Property<double?>("Metragem")
+                        .IsRequired()
                         .HasColumnType("float");
 
                     b.Property<string>("Observacoes")

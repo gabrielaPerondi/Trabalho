@@ -1,44 +1,37 @@
 @{
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
 }
-<partial name="_Alertas" />
 
+<div class="dashboard-container">
 
-<div class="page-header mb-4">
-    <h2 class="fw-bold text-primary">
-        <i class="fa-solid fa-chart-line me-2"></i> Painel do Administrador
+    <h2 class="dashboard-title">
+        <i class="bi bi-speedometer2"></i> Painel do Administrador
     </h2>
-    <p class="text-muted">Visão geral do condomínio</p>
-</div>
+    <p class="dashboard-subtitle">Visão geral do condomínio</p>
 
-<div class="row g-4">
-    <div class="col-md-4">
-        <div class="card stat-card border-0 shadow-sm p-4 text-center">
-            <div class="icon-circle bg-primary-subtle text-primary mb-3">
-                <i class="fa-solid fa-users fa-lg"></i>
-            </div>
-            <h3 class="fw-bold">@ViewBag.TotalCondominos</h3>
-            <p class="text-muted mb-0">Condôminos</p>
+    <div class="info-cards">
+
+        <!-- Condôminos -->
+        <div class="info-card">
+            <i class="bi bi-people-fill info-card-icon"></i>
+            <div class="info-card-number">@ViewBag.TotalCondominos</div>
+            <div class="info-card-label">Condôminos</div>
         </div>
+
+        <!-- Imóveis -->
+        <div class="info-card">
+            <i class="bi bi-building info-card-icon"></i>
+            <div class="info-card-number">@ViewBag.TotalImoveis</div>
+            <div class="info-card-label">Imóveis</div>
+        </div>
+
+        <!-- Funcionários -->
+        <div class="info-card">
+            <i class="bi bi-person-badge-fill info-card-icon"></i>
+            <div class="info-card-number">@ViewBag.TotalFuncionarios</div>
+            <div class="info-card-label">Funcionários</div>
+        </div>
+
     </div>
 
-    <div class="col-md-4">
-        <div class="card stat-card border-0 shadow-sm p-4 text-center">
-            <div class="icon-circle bg-success-subtle text-success mb-3">
-                <i class="fa-solid fa-building fa-lg"></i>
-            </div>
-            <h3 class="fw-bold">@ViewBag.TotalImoveis</h3>
-            <p class="text-muted mb-0">Imóveis</p>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="card stat-card border-0 shadow-sm p-4 text-center">
-            <div class="icon-circle bg-warning-subtle text-warning mb-3">
-                <i class="fa-solid fa-user-tie fa-lg"></i>
-            </div>
-            <h3 class="fw-bold">@ViewBag.TotalFuncionarios</h3>
-            <p class="text-muted mb-0">Funcionários</p>
-        </div>
-    </div>
 </div>

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TrabalhoElvis2.Migrations
 {
     /// <inheritdoc />
-    public partial class dado : Migration
+    public partial class Iind : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -165,7 +165,8 @@ namespace TrabalhoElvis2.Migrations
                     Pagamento = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     QrCodePix = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ComprovantePagamento = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ComprovantePagamento = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ChavePix = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
