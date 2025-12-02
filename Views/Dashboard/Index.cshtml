@@ -1,37 +1,222 @@
 @{
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
 }
+<partial name="_Alertas" />
 
-<div class="dashboard-container">
 
-    <h2 class="dashboard-title">
-        <i class="bi bi-speedometer2"></i> Painel do Administrador
+<!-- =================== CSS GLOBAL DO DASHBOARD =================== -->
+<style>
+
+/* Forçar Inter */
+.card, .card * {
+    font-family: 'Inter', sans-serif !important;
+}
+
+body {
+    background: #f5f7fb !important;
+}
+
+/* Título principal */
+.dashboard-title {
+    font-size: 2.3rem !important;
+    font-weight: 800 !important;
+    color: #1e40af !important;
+}
+
+/* ======== Cards Superiores ======== */
+.dashboard-card {
+    background: #ffffff !important;
+    border-radius: 18px !important;
+    border: 1px solid #e5e7eb !important;
+    padding: 22px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,.06) !important;
+    transition: 0.25s !important;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 12px 24px rgba(0,0,0,.15) !important;
+}
+
+.dashboard-icon {
+    font-size: 36px !important;
+    opacity: .9;
+    margin-top: 10px;
+}
+
+/* ======== Gráficos ======== */
+.grafico-card {
+    background: #ffffff !important;
+    border-radius: 18px !important;
+    padding: 25px !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,.05) !important;
+}
+
+/* ======== Atividades ======== */
+.atividade-item {
+    background: #f9fafb;
+    border-radius: 14px;
+    padding: 15px 20px;
+    border: 1px solid #e5e7eb;
+    margin-bottom: 12px;
+    transition: .2s ease;
+}
+
+.atividade-item:hover {
+    background: #eef2ff;
+    border-color: #6366f1;
+    transform: translateX(6px);
+}
+
+</style>
+
+
+<!-- =================== CONTEÚDO =================== -->
+<div class="container-fluid">
+
+    <h2 class="dashboard-title mb-2">
+        <i class="fa-solid fa-chart-line me-2"></i> Dashboard
     </h2>
-    <p class="dashboard-subtitle">Visão geral do condomínio</p>
+    <p class="text-muted mb-4">Visão geral do condomínio</p>
 
-    <div class="info-cards">
 
-        <!-- Condôminos -->
-        <div class="info-card">
-            <i class="bi bi-people-fill info-card-icon"></i>
-            <div class="info-card-number">@ViewBag.TotalCondominos</div>
-            <div class="info-card-label">Condôminos</div>
+    <!-- ===== CARDS SUPERIORES ===== -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-3">
+            <div class="card dashboard-card">
+                <h6>Total de Imóveis</h6>
+                <h2 class="fw-bold">@ViewBag.TotalImoveis</h2>
+                <i class="fa-solid fa-building text-primary dashboard-icon"></i>
+            </div>
         </div>
 
-        <!-- Imóveis -->
-        <div class="info-card">
-            <i class="bi bi-building info-card-icon"></i>
-            <div class="info-card-number">@ViewBag.TotalImoveis</div>
-            <div class="info-card-label">Imóveis</div>
+        <div class="col-md-3">
+            <div class="card dashboard-card">
+                <h6>Contratos Ativos</h6>
+                <h2 class="fw-bold">@ViewBag.ContratosAtivos</h2>
+                <i class="fa-solid fa-file-contract text-success dashboard-icon"></i>
+            </div>
         </div>
 
-        <!-- Funcionários -->
-        <div class="info-card">
-            <i class="bi bi-person-badge-fill info-card-icon"></i>
-            <div class="info-card-number">@ViewBag.TotalFuncionarios</div>
-            <div class="info-card-label">Funcionários</div>
+        <div class="col-md-3">
+            <div class="card dashboard-card">
+                <h6>Inadimplência</h6>
+                <h2 class="fw-bold text-danger">R$ @ViewBag.Inadimplencia</h2>
+                <i class="fa-solid fa-triangle-exclamation text-danger dashboard-icon"></i>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card dashboard-card">
+                <h6>Receita Mensal</h6>
+                <h2 class="fw-bold text-success">R$ @ViewBag.ReceitaMensal</h2>
+                <i class="fa-solid fa-dollar-sign text-success dashboard-icon"></i>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <!-- ===== GRÁFICOS ===== -->
+    <div class="row g-4">
+
+        <div class="col-lg-6">
+            <div class="card grafico-card">
+                <h5>Taxa de Ocupação</h5>
+                <canvas id="graficoOcupacao"></canvas>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card grafico-card">
+                <h5>Evolução da Receita</h5>
+                <canvas id="graficoReceita"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <!-- ===== STATUS + ATIVIDADES ===== -->
+    <div class="row g-4 mt-4">
+
+        <div class="col-lg-6">
+            <div class="card grafico-card">
+                <h5>Status dos Imóveis</h5>
+                <canvas id="graficoImoveis"></canvas>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card grafico-card">
+                <h5>Atividades Recentes</h5>
+
+                <ul class="list-group list-unstyled">
+                    @if (ViewBag.Atividades != null)
+                    {
+                        foreach (var atividade in ViewBag.Atividades)
+                        {
+                            <div class="atividade-item">
+                                <p class="m-0 fw-bold">@atividade.Mensagem</p>
+                                <span class="text-muted">@atividade.Data</span>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted">Nenhuma atividade encontrada.</p>
+                    }
+                </ul>
+
+            </div>
         </div>
 
     </div>
 
 </div>
+
+
+<!-- =================== CHART JS =================== -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    new Chart(document.getElementById("graficoOcupacao"), {
+        type: "bar",
+        data: {
+            labels: ["Ocupados", "Vagos"],
+            datasets: [{
+                label: "Imóveis",
+                data: [@ViewBag.QtdOcupados, @ViewBag.QtdVagos],
+                backgroundColor: ["#0d9488", "#64748b"]
+            }]
+        }
+    });
+
+    new Chart(document.getElementById("graficoImoveis"), {
+        type: "pie",
+        data: {
+            labels: ["Ocupados", "Vagos"],
+            datasets: [{
+                data: [@ViewBag.QtdOcupados, @ViewBag.QtdVagos],
+                backgroundColor: ["#10b981", "#6b7280"]
+            }]
+        }
+    });
+
+    new Chart(document.getElementById("graficoReceita"), {
+        type: "line",
+        data: {
+            labels: ["Mai", "Jun", "Jul", "Ago", "Set", "Out"],
+            datasets: [{
+                label: "Receita (R$)",
+                data: [80000, 83000, 86000, 84000, 87000, 90000],
+                borderWidth: 3,
+                borderColor: "#2563eb"
+            }]
+        }
+    });
+</script>

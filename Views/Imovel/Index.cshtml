@@ -1,7 +1,6 @@
 @model IEnumerable<TrabalhoElvis2.Models.Imovel>
 <partial name="_Alertas" />
 
-
 @{
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
     ViewData["Title"] = "Imóveis";
@@ -9,13 +8,11 @@
 }
 
 @section Styles {
-    <!-- Importa uma biblioteca (framework) e ícones -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/imoveis.css" />
 }
 
-<!-- Restrição de acesso -->
 @if (tipoUsuario != "Administrador")
 {
     <div class="text-center mt-5">
@@ -27,37 +24,31 @@
 else
 {
     <div class="container mt-4 mb-5">
-        <!-- Cabeçalho -->
+
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
                 <h3 class="fw-bold text-dark mb-1">Imóveis</h3>
                 <p class="text-muted mb-0">Gestão de imóveis do condomínio</p>
             </div>
-            <!-- Botão que abre o modal de cadastro -->
-            <button class="btn btn-primary d-flex align-items-center gap-2" data-bs-toggle="modal"
-                data-bs-target="#modalCadastro">
+
+            <button class="btn btn-primary d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalCadastro">
                 <i class="bi bi-plus-lg"></i> Novo Imóvel
             </button>
         </div>
 
-        <!-- FILTROS de status E BUSCA -->
         <form method="get" asp-action="Index" class="d-flex flex-wrap gap-2 mb-4">
             <div class="flex-grow-1">
-                <input type="text" name="termoBusca" class="form-control"
-                    placeholder="Buscar por código, endereço ou proprietário..." value="@ViewBag.TermoBusca" />
+                <input type="text" name="termoBusca" class="form-control" placeholder="Buscar por código, endereço ou proprietário..." value="@ViewBag.TermoBusca" />
             </div>
             <div>
-                <!-- AQUI ESTÁ O SELECT FUNCIONAL -->
                 <select name="statusFiltro" class="form-select" onchange="this.form.submit()">
-                    <option value="Todos os Status" selected="@(ViewBag.StatusFiltro == "Todos os Status")">Todos os Status
-                    </option>
+                    <option value="Todos os Status" selected="@(ViewBag.StatusFiltro == "Todos os Status")">Todos os Status</option>
                     <option value="Ocupado" selected="@(ViewBag.StatusFiltro == "Ocupado")">Ocupado</option>
                     <option value="Vago" selected="@(ViewBag.StatusFiltro == "Vago")">Vago</option>
                 </select>
             </div>
         </form>
 
-        <!-- LISTA DE IMÓVEIS -->
         <div class="list-group">
             @foreach (var item in Model)
             {
@@ -67,9 +58,8 @@ else
                             <i class="bi bi-house-door text-primary fs-3"></i>
                             <div>
                                 <h5 class="mb-1 fw-semibold">@item.Codigo</h5>
-                                <p class="text-muted mb-1">
-                                    <i class="bi bi-geo-alt"></i> @item.Observacoes
-                                </p>
+                                <p class="text-muted mb-1"><i class="bi bi-geo-alt"></i> @item.Observacoes</p>
+
                                 <div class="d-flex gap-3 text-muted small">
                                     <span><i class="bi bi-door-open"></i> @item.Quartos quartos</span>
                                     <span><i class="bi bi-badge-wc"></i> @item.Banheiros banheiros</span>
@@ -79,15 +69,14 @@ else
                         </div>
 
                         <div class="text-end">
-                            <span
-                                class="badge rounded-pill px-3 py-2 fs-6 @(item.Status == "Ocupado" ? "bg-dark" : "bg-light text-dark border")">
+                            <span class="badge rounded-pill px-3 py-2 fs-6 @(item.Status == "Ocupado" ? "bg-dark" : "bg-light text-dark border")">
                                 @item.Status
                             </span>
+
                             <p class="text-muted mt-3 mb-1">Aluguel</p>
                             <h5 class="text-success fw-bold">
                                 @(item.ValorAluguel.HasValue ? $"R$ {item.ValorAluguel.Value.ToString("N2")}" : "")
                             </h5>
-
                         </div>
                     </div>
 
@@ -95,15 +84,14 @@ else
                         <p class="mb-0 text-muted small">
                             Proprietário <strong>@item.Condomino?.NomeCompleto</strong>
                         </p>
+
                         <div>
-                            <a asp-controller="Imovel" asp-action="Editar" asp-route-id="@item.Id"
-                                class="btn btn-sm btn-outline-primary me-1">
+                            <a asp-controller="Imovel" asp-action="Editar" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary me-1">
                                 <i class="bi bi-pencil"></i>
                             </a>
+
                             <form asp-action="Excluir" asp-route-id="@item.Id" method="post" style="display:inline;">
-                                <button type="submit" class="btn btn-sm btn-outline-danger">
-                                    <i class="bi bi-trash"></i>
-                                </button>
+                                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
                             </form>
                         </div>
                     </div>
@@ -112,23 +100,86 @@ else
         </div>
     </div>
 
-    <!-- MODAL CADASTRAR NOVO IMÓVEL -->
-    <div class="modal fade" id="modalCadastro" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content p-4">
-                <div class="modal-header">
-                    <h5 class="modal-title">Cadastrar Novo Imóvel</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+    <!-- 🔵 MODAL NOVO — IGUAL AO DE CADASTRAR PESSOA -->
+    <div class="modal fade" id="modalCadastro" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="border-radius: 16px;">
+
+                <div class="modal-header" style="background:#0d6efd; border-radius: 16px 16px 0 0;">
+                    <h4 class="modal-title fw-bold text-white">Cadastrar Novo Imóvel</h4>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
+
                 <form asp-action="Cadastrar" method="post">
-                    <div class="modal-body">
-                        @await Html.PartialAsync("_FormImovel", new TrabalhoElvis2.Models.Imovel())
+                    <div class="modal-body p-4">
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <label class="fw-semibold">Código</label>
+                                <input name="Codigo" class="form-control" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="fw-semibold">Tipo</label>
+                                <select name="Tipo" class="form-select">
+                                    <option value="">Selecione...</option>
+                                    <option>Apartamento</option>
+                                    <option>Cobertura</option>
+                                    <option>Sala Comercial</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="fw-semibold">Quartos</label>
+                                <input name="Quartos" type="number" class="form-control" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="fw-semibold">Banheiros</label>
+                                <input name="Banheiros" type="number" class="form-control" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="fw-semibold">Metragem (m²)</label>
+                                <input name="Metragem" type="number" step="0.1" class="form-control" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="fw-semibold">Valor do Aluguel (R$)</label>
+                                <input name="ValorAluguel" type="number" step="0.01" class="form-control" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="fw-semibold">Proprietário</label>
+                                <select name="CondominoId" class="form-select" asp-items="ViewBag.Condominos">
+                                    <option value="">Selecione...</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="fw-semibold">Observações</label>
+                                <textarea name="Observacoes" class="form-control" rows="3"></textarea>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="fw-semibold">Status</label>
+                                <select name="Status" class="form-select">
+                                    <option value="Vago">Vago</option>
+                                    <option value="Ocupado">Ocupado</option>
+                                </select>
+                            </div>
+
+                        </div>
+
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+
+                    <div class="modal-footer d-flex justify-content-end">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary px-4">Cadastrar</button>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
@@ -136,17 +187,4 @@ else
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        // Reabre o modal de cadastro apenas se o formulário de cadastro foi submetido e houver erro
-        document.addEventListener("DOMContentLoaded", function () {
-            const urlParams = new URLSearchParams(window.location.search);
-            const isCadastro = urlParams.get("cadastro") === "1";
-            const hasErrors = document.querySelectorAll(".text-danger").length > 0;
-            if (isCadastro && hasErrors) {
-                const modal = new bootstrap.Modal(document.getElementById("modalCadastro"));
-                modal.show();
-            }
-        });
-    </script>
 }
