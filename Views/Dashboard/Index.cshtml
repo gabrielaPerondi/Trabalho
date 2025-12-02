@@ -3,83 +3,118 @@
 }
 <partial name="_Alertas" />
 
-
-<!-- =================== CSS GLOBAL DO DASHBOARD =================== -->
 <style>
-
-/* Forçar Inter */
-.card, .card * {
-    font-family: 'Inter', sans-serif !important;
-}
-
+/* ======== BODY E TIPOGRAFIA ======== */
 body {
-    background: #f5f7fb !important;
+    background: #f5f7fb;
+    font-family: 'Poppins', sans-serif;
+    color: #2b2d42;
+    transition: all 0.3s ease;
 }
 
-/* Título principal */
-.dashboard-title {
-    font-size: 2.3rem !important;
-    font-weight: 800 !important;
-    color: #1e40af !important;
-}
-
-/* ======== Cards Superiores ======== */
+/* ======== CARDS SUPERIORES ======== */
 .dashboard-card {
-    background: #ffffff !important;
-    border-radius: 18px !important;
-    border: 1px solid #e5e7eb !important;
-    padding: 22px !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,.06) !important;
-    transition: 0.25s !important;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    padding: 20px 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    transition: all 0.3s ease;
 }
 
 .dashboard-card:hover {
-    transform: translateY(-4px) !important;
-    box-shadow: 0 12px 24px rgba(0,0,0,.15) !important;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+
+.dashboard-card h6 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+.dashboard-card h2 {
+    font-size: 2rem;
+    font-weight: 700;
 }
 
 .dashboard-icon {
-    font-size: 36px !important;
-    opacity: .9;
-    margin-top: 10px;
+    font-size: 36px;
+    margin-top: 12px;
+    opacity: 0.85;
 }
 
-/* ======== Gráficos ======== */
+/* ======== GRÁFICOS ======== */
 .grafico-card {
-    background: #ffffff !important;
-    border-radius: 18px !important;
-    padding: 25px !important;
-    border: 1px solid #e5e7eb !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,.05) !important;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 20px 25px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    transition: all 0.3s ease;
 }
 
-/* ======== Atividades ======== */
+.grafico-card h5 {
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+/* ======== ATIVIDADES RECENTES ======== */
 .atividade-item {
     background: #f9fafb;
-    border-radius: 14px;
-    padding: 15px 20px;
+    border-radius: 12px;
+    padding: 12px 16px;
     border: 1px solid #e5e7eb;
-    margin-bottom: 12px;
-    transition: .2s ease;
+    margin-bottom: 10px;
+    transition: all 0.2s ease;
 }
 
 .atividade-item:hover {
-    background: #eef2ff;
+    background-color: #eef2ff;
     border-color: #6366f1;
-    transform: translateX(6px);
+    transform: translateX(4px);
 }
 
+.atividade-item p {
+    margin: 0;
+    font-weight: 500;
+}
+
+.atividade-item span {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+/* ======== RESPONSIVIDADE ======== */
+@@media (max-width: 992px) {
+    .dashboard-card,
+    .grafico-card {
+        margin-bottom: 20px;
+    }
+}
+
+@@media (max-width: 768px) {
+    .dashboard-card h2 {
+        font-size: 1.6rem;
+    }
+    .dashboard-card h6 {
+        font-size: 0.85rem;
+    }
+}
+
+/* ======== TAMANHO DOS CANVAS ======== */
+canvas {
+    width: 100% !important;
+    height: 250px !important;
+}
 </style>
 
-
-<!-- =================== CONTEÚDO =================== -->
 <div class="container-fluid">
 
     <h2 class="dashboard-title mb-2">
         <i class="fa-solid fa-chart-line me-2"></i> Dashboard
     </h2>
     <p class="text-muted mb-4">Visão geral do condomínio</p>
-
 
     <!-- ===== CARDS SUPERIORES ===== -->
     <div class="row g-4 mb-4">
@@ -118,8 +153,6 @@ body {
 
     </div>
 
-
-
     <!-- ===== GRÁFICOS ===== -->
     <div class="row g-4">
 
@@ -138,8 +171,6 @@ body {
         </div>
 
     </div>
-
-
 
     <!-- ===== STATUS + ATIVIDADES ===== -->
     <div class="row g-4 mt-4">
@@ -179,11 +210,12 @@ body {
 
 </div>
 
-
 <!-- =================== CHART JS =================== -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    // Gráfico de ocupação
     new Chart(document.getElementById("graficoOcupacao"), {
         type: "bar",
         data: {
@@ -193,9 +225,14 @@ body {
                 data: [@ViewBag.QtdOcupados, @ViewBag.QtdVagos],
                 backgroundColor: ["#0d9488", "#64748b"]
             }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
         }
     });
 
+    // Gráfico de status (pie)
     new Chart(document.getElementById("graficoImoveis"), {
         type: "pie",
         data: {
@@ -204,9 +241,14 @@ body {
                 data: [@ViewBag.QtdOcupados, @ViewBag.QtdVagos],
                 backgroundColor: ["#10b981", "#6b7280"]
             }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
         }
     });
 
+    // Gráfico de receita (line)
     new Chart(document.getElementById("graficoReceita"), {
         type: "line",
         data: {
@@ -217,6 +259,12 @@ body {
                 borderWidth: 3,
                 borderColor: "#2563eb"
             }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
         }
     });
+
+});
 </script>
